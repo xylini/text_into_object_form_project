@@ -15,9 +15,9 @@ public class SubChapter {
     int start_index;
     int stop_index;
     String subChapName;
-    List<String> subChapDescription = new ArrayList<String>();
-    List<String> content = new ArrayList<String>();
-    Map<String, Art> artMap = new LinkedHashMap<String, Art>();
+    List<String> subChapDescription;
+    List<String> content;
+    Map<String, Art> artMap;
 
     /**
      * Builds content of SubChapter and creates instances of Art [class].
@@ -30,6 +30,7 @@ public class SubChapter {
      *              The cleaned full content of file.
      */
     public SubChapter(int start_index, int stop_index, List<String> cleanedContent){
+        subChapDescription = new ArrayList<String>();
         if(Pattern.matches("^([A-ZĘÓĄŚŁŻŹĆŃ]{2}.*)|(Rozdział [0-9]+[a-z]*.*)$", cleanedContent.get(start_index))){
             this.subChapName = cleanedContent.get(start_index);
             if(Pattern.matches("^(Rozdział [0-9]+[a-z]*.*)$", cleanedContent.get(start_index)))
@@ -43,6 +44,8 @@ public class SubChapter {
         int artStartIndex= 0;
         int artStopIndex = 0;
 
+        content = new ArrayList<String>();
+        artMap = new LinkedHashMap<String, Art>();
         for(int i = start_index; i < stop_index; i++){
             if(Pattern.matches("^(Art.*)$", cleanedContent.get(i))){
                 String pointKey = cleanedContent.get(i);

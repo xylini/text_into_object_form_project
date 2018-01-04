@@ -15,8 +15,8 @@ public class PointNumber {
     int start_index;
     int stop_index;
     String pointNumber;
-    List<String> content = new ArrayList<String>();
-    Map<String, SubPointNumber> subPoints = new LinkedHashMap<>();
+    List<String> content;
+    Map<String, SubPointNumber> subPoints;
 
     /**
      * Builds content of PointNumber and creates instances of SubPointNumber [class] (if contain).
@@ -35,6 +35,8 @@ public class PointNumber {
 
         int pointStartIndex = 0;
         int pointStopIndex = 0;
+        content = new ArrayList<String>();
+        subPoints = new LinkedHashMap<>();
         for(int i = start_index; i < stop_index; i++){
             if(Pattern.matches("^([0-9]+[a-z]?\\) .*)$", cleanedContent.get(i))) {
                 String subPointKey = cleanedContent.get(i).split(" ")[0];

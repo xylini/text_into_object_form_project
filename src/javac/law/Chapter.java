@@ -23,7 +23,7 @@ class Chapter {
     /**
      * Builds content of Chapter and creates instances of SubChapter [class].
      * If there is no SubChapter in it then creates an instance named "none",
-     * which is whole Chapter except it's name and description.
+     * which is whole Chapter except its name and description.
      *
      * @param start_index
      *              The index where chapter starts in cleanedContent.

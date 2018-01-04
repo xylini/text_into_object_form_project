@@ -14,7 +14,7 @@ public class LetterInSubPoint {
     int start_index;
     int stop_index;
     String subPointLetter;
-    List<String> content = new ArrayList<String>();
+    List<String> content;
 
     /**
      * Builds content of LetterInSubPoint.
@@ -30,6 +30,7 @@ public class LetterInSubPoint {
         this.start_index = start_index;
         this.stop_index  = stop_index;
         this.subPointLetter = cleanedContent.get(start_index).split(" ")[0];
+        content = new ArrayList<String>();
         for(int i = start_index; i < stop_index; i++){
             this.content.add(cleanedContent.get(i));
         }

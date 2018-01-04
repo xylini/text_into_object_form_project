@@ -15,14 +15,14 @@ public class Art {
     int start_index;
     int stop_index;
     String artNumber;
-    List<String> content = new ArrayList<String>();
-    Map<String, PointNumber> points = new LinkedHashMap<>();
-    Boolean hasNumbers = true;
+    List<String> content;
+    Map<String, PointNumber> points;
+    Boolean hasNumbers;
 
     /**
      * Builds content of Art and creates instances of PointNumber [class].
      * If there is no PointNumber in it then creates an instance named "none",
-     * which is whole Art except it's name and art-level-content.
+     * which is whole Art except its name and art-level-content.
      *
      * @param start_index
      *              The index where Art starts in cleanedContent.
@@ -39,6 +39,9 @@ public class Art {
         int pointStartIndex= 0;
         int pointStopIndex = 0;
 
+        content = new ArrayList<String>();
+        points = new LinkedHashMap<>();
+        hasNumbers = true;
         for(int i = start_index; i < stop_index; i++){
             if(Pattern.matches("^([0-9]+[a-z]?\\. .*)$", cleanedContent.get(i))){
                 String pointKey = cleanedContent.get(i).split(" ")[0];

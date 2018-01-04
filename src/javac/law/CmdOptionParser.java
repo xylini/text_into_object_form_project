@@ -25,26 +25,51 @@ public class CmdOptionParser {
                       "    7)\"konstytucja.txt -t Art. 72.:Art. 80.\" - dwukropkiem rozdzielamy zakres artykułów\n"+
                       "Przykładowa nazwa specyficznego elementu: \"Art. 111.,3.,1),b)\", bądź po prostu \"całość\"\n"+
                       "Podawane wyróżnione elementy powinny być oddzielane przecinkiem, jw.\n"+
-                      "Dostępne tryby działania: -t - treść, -s - spis treści.\n";
+                      "Dostępne tryby działania: -t - treść, -s - spis treści.\n"+
+                      "\n"+
+                      "Postać elementów dostępnych dla trybu \"-s\": Rozdział [NUMER]\n"+
+                      "                                            DZIAŁ [NUMER]\n"+
+                      "                                            całość\n"+
+                      "\n"+
+                      "Postać elementów dostępnych dla trybu \"-t\": Art. [numer].,[numer].,[numer]),[litera])\n"+
+                      "                                            Art. [numer].,[numer]),[litera])\n"+
+                      "                                            Rozdział [NUMER],[NAZWA_PODROZDZIAŁU]\n"+
+                      "                                            DZIAŁ [NUMER],Rozdział [numer]\n"+
+                      "                                            Art. [numer].:Art. [numer].\n"+
+                      "                                            całość\n"+
+                      "\n"+
+                      "Długość specyficznego elementu można skracać jednak należy pamiętać o jego pełnej nazwie,\n"+
+                      "dokładnej co do kropki oraz rozdzielaniu tylko przecinkiem. Wyjątkiem jest zakres artykułów, bo \":\".";
 
     /**
      * Converts given arguments cmd to choose what should be done.
      *
-     * @param cmd
-     *              Command line input.
+     * @param args
+     *              Commandline input.
      */
 
-    public CmdOptionParser(String cmd){
-        this.cmdList = cmd.split(" ",3);
-        this.fileContent = new ClearInput(new Read(this.cmdList[0]).returnReadFile()).returnStringList();
-        this.inputFile =  new MergeContentClass(this.fileContent);
-        this.artMap = this.inputFile.returnArtMap();
-        this.chapMap = this.inputFile.returnChapterMap();
+    public CmdOptionParser(String[] args){
+        //prepares input
+        if(args.length >= 3) {
+            String cmd = "";
+            for (String arg : args)
+                cmd = cmd + arg + " ";
+            cmd = cmd.substring(0, cmd.lastIndexOf(" "));
 
-        if(this.cmdList[1].equals("-t"))
-            writeElement(this.cmdList[2]);
-        else if(this.cmdList[1].equals("-s"))
-            writeTable(this.cmdList[2]);
+            this.cmdList = cmd.split(" ", 3);
+            this.fileContent = new ClearInput(new Read(this.cmdList[0]).returnReadFile()).returnStringList();
+            this.inputFile = new MergeContentClass(this.fileContent);
+            this.artMap = this.inputFile.returnArtMap();
+            this.chapMap = this.inputFile.returnChapterMap();
+
+            //chooses the option
+            if (this.cmdList[1].equals("-t") && this.cmdList.length == 3)
+                writeElement(this.cmdList[2]);
+            else if (this.cmdList[1].equals("-s") && this.cmdList.length == 3)
+                writeTable(this.cmdList[2]);
+        }
+        else
+            System.out.println(help);
     }
 
     /**
@@ -54,7 +79,7 @@ public class CmdOptionParser {
      *              A String witch contains path to selected element.
      */
     private void writeElement(String track){
-        String [] elements = track.split("(,)|(:)",2);
+        String [] elements = track.split("(,)|(:)");
         try{
             if(track.matches("^(Art. [1-9][0-9a-z]*\\.,[1-9][0-9a-z]*\\.,[0-9]+[a-z]?\\),[a-z]\\))$"))
                 this.artMap.get(elements[0]).selectPoint(elements[1]).selectSubPoint(elements[2]).selectLetter(elements[3]).writeContent();
@@ -75,7 +100,7 @@ public class CmdOptionParser {
             else if(track.matches("^((Rozdział|DZIAŁ) [IXVL]+[A-Z]*),([A-ZĘÓĄŚŁŻŹĆŃ ,]{2,})$"))
                 this.chapMap.get(elements[0]).selectSubChap(elements[1]).writeContent();
             else if(track.matches("^(całość)$"))
-                this.chapMap.forEach((key, value) -> value.writeContent());
+                this.fileContent.forEach(s -> System.out.println(s));
             else if(track.matches("^(Art\\. .*\\.:Art\\. .*\\.)$"))
                 writeArtRange(elements[0],elements[1]);
             else{

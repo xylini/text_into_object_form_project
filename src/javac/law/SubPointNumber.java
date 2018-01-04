@@ -15,8 +15,8 @@ public class SubPointNumber {
     int start_index;
     int stop_index;
     String subPointNumber;
-    List<String> content = new ArrayList<String>();
-    Map<String, LetterInSubPoint> subPointLetters = new LinkedHashMap<>();
+    List<String> content;
+    Map<String, LetterInSubPoint> subPointLetters;
 
     /**
      * Builds content of SubPointNumber and creates instances of LetterInSubPoint [class] (if contain).
@@ -35,6 +35,8 @@ public class SubPointNumber {
 
         int letterStartIndex = 0;
         int letterStopIndex = 0;
+        content = new ArrayList<String>();
+        subPointLetters = new LinkedHashMap<>();
         for(int i = start_index; i < stop_index; i++){
             if(Pattern.matches("^([a-z]\\) .*)", cleanedContent.get(i))) {
                 String subPointLetterKey = cleanedContent.get(i).split(" ")[0];
